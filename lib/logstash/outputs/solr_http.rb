@@ -62,7 +62,7 @@ class LogStash::Outputs::SolrHTTP < LogStash::Outputs::Base
 
     events.each do |event|
         document = event.to_hash()
-        document["@timestamp"] = document["@timestamp"].iso8601 #make the timestamp ISO
+        #document["@timestamp"] = document["@timestamp"].iso8601 our timestamp is in ISO from our input plugin, this breaks.
         if @document_id.nil?
           document ["id"] = UUIDTools::UUID.random_create    #add a unique ID
         else

@@ -62,13 +62,13 @@ class LogStash::Outputs::SolrHTTP < LogStash::Outputs::Base
 
     events.each do |event|
         document = event.to_hash()
-        #document["@timestamp"] = document["@timestamp"].iso8601 skip this since our input sends iso timestamp and it breaks otherwise
+        document["@timestamp"] = document["@timestamp"].iso8601 #make the timestamp ISO
         if @document_id.nil?
           document ["id"] = UUIDTools::UUID.random_create    #add a unique ID
         else
           document ["id"] = event.sprintf(@document_id)      #or use the one provided
         end
-        @solr.add(documents, :add_attributes => {:commitWithin=>10000}) # lets also commit them automatically(this do not save to file yet, only to RTI.
+        documents.push(document)
     end
 
     @solr.add(documents)
